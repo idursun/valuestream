@@ -1,0 +1,6 @@
+[package]
+name = "valuestream"
+version = "0.1.0"
+authors = ["ibrahim.dursun <ibrahim.dursun@red-gate.com>"]
+
+[dependencies]
