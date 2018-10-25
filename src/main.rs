@@ -17,6 +17,15 @@ impl<T> ValueStream<T> {
         ValueStream(ds)
     }
 
+    fn last_value(&self) -> Option<&DataPoint<T>> {
+        let len = self.0.len();
+        if len > 0 {
+            let v = &self.0[len - 1];
+            return Some(v);
+        }
+        None
+    }
+
     fn len(&self) -> usize {
         self.0.len()
     }
@@ -58,6 +67,10 @@ fn main() {
     println!(
         "divided   : {:?}",
         ValueStream::new().add(0, 10).add(1, 20) / 2
+    );
+    println!(
+        "last_value: {:?}",
+        ValueStream::new().add(0, 10).add(1, 20).last_value()
     );
     println!(
         "multiplied: {:?}",
