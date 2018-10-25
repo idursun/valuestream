@@ -1,4 +1,4 @@
-use std::ops::Div;
+use std::ops::{Div, Mul};
 
 #[derive(Debug)]
 struct DataPoint<T>(u64, T);
@@ -22,18 +22,6 @@ impl<T> ValueStream<T> {
     }
 }
 
-impl<T> Div<T> for DataPoint<T>
-where
-    T: Div<Output = T> + Copy,
-{
-    type Output = DataPoint<T>;
-
-    fn div(self, rhs: T) -> Self::Output {
-        let n = self.1 / rhs;
-        DataPoint(self.0, n)
-    }
-}
-
 impl<T> Div<T> for ValueStream<T>
 where
     T: Div<Output = T> + Copy,
@@ -41,15 +29,38 @@ where
     type Output = ValueStream<T>;
 
     fn div(self, rhs: T) -> Self::Output {
-        let divided = self.0.into_iter().map(|dp| dp / rhs).collect::<Vec<_>>();
-        ValueStream(divided)
+        ValueStream(
+            self.0
+                .into_iter()
+                .map(|dp| DataPoint(dp.0, dp.1 / rhs))
+                .collect::<Vec<_>>(),
+        )
+    }
+}
+
+impl<T> Mul<T> for ValueStream<T>
+where
+    T: Mul<Output = T> + Copy,
+{
+    type Output = ValueStream<T>;
+
+    fn mul(self, rhs: T) -> Self::Output {
+        ValueStream(
+            self.0
+                .into_iter()
+                .map(|dp| DataPoint(dp.0, dp.1 * rhs))
+                .collect::<Vec<_>>(),
+        )
     }
 }
 
 fn main() {
-    let vs = ValueStream::<i32>::new();
-    let vs2 = vs.add(0, 10).add(1, 20);
-    let divided = vs2 / 2;
-    println!("Hello, world! {:?}", divided.len());
-    println!("Hello, world! {:?}", divided);
+    println!(
+        "divided   : {:?}",
+        ValueStream::new().add(0, 10).add(1, 20) / 2
+    );
+    println!(
+        "multiplied: {:?}",
+        ValueStream::new().add(0, 10).add(1, 20) * 2
+    );
 }
