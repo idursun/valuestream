@@ -31,29 +31,31 @@ impl<T> ValueStream<T> {
     }
 }
 
-impl<T> Div<T> for ValueStream<T>
+impl<T, S> Div<S> for ValueStream<T>
 where
-    T: Div<Output = T> + Copy,
+    S: Copy,
+    T: Div<S, Output = T>,
 {
     type Output = ValueStream<T>;
 
-    fn div(self, rhs: T) -> Self::Output {
+    fn div(self, rhs: S) -> Self::Output {
         ValueStream(
             self.0
                 .into_iter()
                 .map(|dp| DataPoint(dp.0, dp.1 / rhs))
-                .collect::<Vec<_>>(),
+                .collect::<Vec<DataPoint<T>>>(),
         )
     }
 }
 
-impl<T> Mul<T> for ValueStream<T>
+impl<T, S> Mul<S> for ValueStream<T>
 where
-    T: Mul<Output = T> + Copy,
+    S: Copy,
+    T: Mul<S, Output = T> + Copy,
 {
     type Output = ValueStream<T>;
 
-    fn mul(self, rhs: T) -> Self::Output {
+    fn mul(self, rhs: S) -> Self::Output {
         ValueStream(
             self.0
                 .into_iter()
