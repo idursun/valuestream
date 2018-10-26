@@ -1,9 +1,9 @@
 use std::ops::{Div, Mul};
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 struct DataPoint<T>(u64, T);
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 struct ValueStream<T>(Vec<DataPoint<T>>);
 
 impl<T> ValueStream<T> {
@@ -66,16 +66,8 @@ where
 }
 
 fn main() {
-    println!(
-        "divided   : {:?}",
-        ValueStream::new().add(0, 10).add(1, 20) / 2
-    );
-    println!(
-        "last_value: {:?}",
-        ValueStream::new().add(0, 10).add(1, 20).last_value()
-    );
-    println!(
-        "multiplied: {:?}",
-        ValueStream::new().add(0, 10).add(1, 20) * 2
-    );
+    let vs = ValueStream::new().add(0, 10).add(1, 20);
+    println!("divided   : {:?}", vs.clone() / 2);
+    println!("last_value: {:?}", vs.clone().last_value());
+    println!("multiplied: {:?}", vs.clone() * 2);
 }
