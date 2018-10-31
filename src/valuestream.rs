@@ -1,7 +1,7 @@
 use datapoint::DataPoint;
 use std::ops::{Div, Mul};
 
-#[derive(Debug, Clone)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct ValueStream<T>(Vec<DataPoint<T>>)
 where
     T: Clone;
@@ -81,5 +81,16 @@ where
                 .map(|dp| dp.map(|x| x * rhs))
                 .collect::<Vec<_>>(),
         )
+    }
+}
+
+#[cfg(test)]
+mod tests {
+
+    use super::ValueStream;
+    #[test]
+    fn should_divide() {
+        let vs = ValueStream::new().add(0, 2).add(1, 4).add(2, 6) / 2;
+        assert_eq!(ValueStream::from(vec![(0, 1), (1, 2), (2, 3)]), vs);
     }
 }

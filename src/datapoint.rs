@@ -1,5 +1,4 @@
-
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct DataPoint<T>(pub u64, pub Option<T>)
 where
     T: Clone;
