@@ -1,4 +1,3 @@
-use std::ops::{Div, Mul};
 
 #[derive(Debug, Clone)]
 pub struct DataPoint<T>(pub u64, pub Option<T>)
